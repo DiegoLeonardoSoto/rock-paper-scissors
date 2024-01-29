@@ -13,23 +13,6 @@ function getComputerChoice() {
   return GAME_CHOICES[(Math.random() * 3) | 0]
 }
 
-/* The code block is responsible for prompting the user to enter their choice of "rock", "paper", or
-"scissors" and storing it in the variable `playerChoice`. The `while` loop ensures that the user's
-input is valid by checking if the entered choice is present in the `GAME_CHOICES` array. If the
-entered choice is not found in the array, the prompt will be displayed again until a valid choice is
-entered. The `.toLowerCase()` method is used to convert the user's input to lowercase for
-case-insensitive comparison. */
-
-function getPlayerChoice() {
-  let playerChoice
-  while (!GAME_CHOICES.find((e) => e === playerChoice)) {
-    playerChoice = prompt(
-      'Write your choice: Rock, paper or scissors'
-    ).toLowerCase()
-  }
-  return playerChoice
-}
-
 // set computer choice
 
 function playRound(playerSelection, computerSelection) {
@@ -49,19 +32,33 @@ function playRound(playerSelection, computerSelection) {
   }
 }
 
-function game() {
-  for (let i = 0; i < 5; i++) {
-    let playerChoice = getPlayerChoice()
-    let computerChoice = getComputerChoice()
+let result = document.querySelector('#result')
+let computerChoiceDisplay = document.querySelector('#computerChoice')
+let buttonsContainer = document.querySelector('#buttonsContainer')
 
-    if (playerChoice === computerChoice) {
-      console.log("it's a draw") //1) if it's a draw
-      i--
-    } else {
-      console.log(playRound(playerChoice, computerChoice))
-    }
+let playerScore = document.querySelector('#playerScore')
+let computerScore = document.querySelector('#computerScore')
+
+function getSelecction(e) {
+  const computerChoice = getComputerChoice()
+  computerChoiceDisplay.textContent = computerChoice
+
+  if (computerChoice === this.id) {
+    result.textContent = "It's a draw"
+  } else {
+    result.textContent = playRound(this.id, computerChoice)
   }
-  console.log(score)
+
+  playerScore.textContent = score.playerScore
+  computerScore.textContent = score.computerScore
+
+  if (score.playerScore === 5) {
+    buttonsContainer.innerHTML = `<h1>YOU WINS!</h1>`
+  } else if (score.computerScore === 5) {
+    buttonsContainer.innerHTML = `<h1>COMPUTER WINS!</h1>`
+  }
 }
 
-game()
+const btns = document.querySelectorAll('button')
+
+btns.forEach((btn) => btn.addEventListener('click', getSelecction))
